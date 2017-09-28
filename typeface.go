@@ -90,8 +90,8 @@ This code was generated automatically using github.com/hexdigest/typeface
 The original type %q can be found in %s package
 You can generate mock for this interface using github.com/gojuno/minimock:
 
-minimock -f %s -i %s -p %s -o %s
-`, opts.SourceTypeName, packagePath, opts.OutputFile, opts.InterfaceName, opts.Package, strings.Replace(opts.OutputFile, ".go", "_mock.go", 1)))
+minimock -i %s.%s -o ./
+`, opts.SourceTypeName, packagePath, destPackagePath, opts.InterfaceName))
 
 	v := &visitor{
 		gen:          gen,
@@ -151,7 +151,7 @@ func (v *visitor) Visit(node ast.Node) ast.Visitor {
 func (v *visitor) private() {}
 
 const template = `
-	//{{$structName}} contains methods defined for {{$packagePath}}.{{$structName}}
+	//{{$interfaceName}} contains exportable methods signatures of the {{$packagePath}}.{{$structName}}
 	type {{$interfaceName}} interface {
 		{{ range $methodName, $methodInfo := . }}
 		{{if $methodInfo.Doc }}{{range $i, $comment := $methodInfo.Doc.List}}{{$comment.Text}}
